@@ -3,18 +3,18 @@ from _pydatetime import date
 from pydantic import BaseModel
 
 
-class BooksBase(BaseModel):
+class BookBase(BaseModel):
     title: str
     summary: str
     publication_date: date
     author_id: int
 
 
-class BooksCreate(BooksBase):
+class BookCreate(BookBase):
     pass
 
 
-class Books(BooksBase):
+class Book(BookBase):
     id: int
 
     class Config:

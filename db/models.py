@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from db.database import Base
 
 
-class Books(Base):
+class Book(Base):
     __tablename__ = "books"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -21,4 +21,4 @@ class Author(Base):
     name = Column(String(255), nullable=False, unique=True)
     bio = Column(String(511), nullable=False)
     books_id = Column(Integer, ForeignKey("books.id"))
-    books = relationship(Books)
+    books = relationship(Book)
