@@ -1,46 +1,47 @@
 from sqlalchemy.orm import Session
-
-from db import models
+from db.models import Author, Book
 import schemas
-from db.models import PackagingType
 
 
-def get_all_authors(db: Session):
-    return db.query(models.Author).all()
+def get_all_authors(db: Session) -> list[Author]:
+    return db.query(Author).all()
 
 
-def get_book_by_author_id(db: Session, author_id: str):
+def get_author(db: Session, author_id: int) -> Author | None:
+    return db.query(Author).filter(Author.id == author_id).first()
+
+
+def get_author_by_name(db: Session, name: str) -> Author | None:
     return (
-        db.query(models.Author).filter(models.Author.id == author_id).first()
+        db.query(Author).filter(Author.name == name).first()
     )
 
 
-def create_author(db: Session, author: schemas.AuthorCreate):
-    db_create_author = models.Author(
+def create_author(db: Session, author: schemas.AuthorCreate) -> Author:
+    db_create_author = Author(
         name=author.name,
         bio=author.bio,
     )
     db.add(db_create_author)
     db.commit()
     db.refresh(db_create_author)
-
     return db_create_author
 
 
 def get_book_list(
     db: Session,
-    author_id: int | None = None,
-):
-    queryset = db.query(models.Book)
+    author_id: int | None = None
+) -> list[Book] | None:
+    queryset = db.query(Book)
 
     if author_id is not None:
-        queryset = queryset.filter(models.Book.author_id=author_id)
+        queryset = queryset.filter(Book.author_id == author_id)
 
     return queryset.all()
 
 
-def create_book(db: Session, book: schemas.BookCreate):
-    db_book = models.Book(
+def create_book(db: Session, book: schemas.BookCreate) -> Book:
+    db_book = Book(
         title=book.title,
         summary=book.summary,
         publication_date=book.publication_date,
