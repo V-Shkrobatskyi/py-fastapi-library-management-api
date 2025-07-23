@@ -32,11 +32,11 @@ def read_authors(
 
 
 @app.get("/authors/{author_id}/", response_model=schemas.Author)
-def read_authors(author_id: int | None = None, db: Session = Depends(get_db)):
+def read_authors(author_id: int, db: Session = Depends(get_db)):
     db_author = crud.get_author(db=db, author_id=author_id)
 
     if db_author is None:
-        raise HTTPException(status_code=404, detail="Cheese not found")
+        raise HTTPException(status_code=404, detail="Author not found")
 
     return db_author
 

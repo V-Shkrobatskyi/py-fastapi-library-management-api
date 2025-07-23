@@ -33,7 +33,7 @@ def get_book_list(
     author_id: int | None = None,
     skip: int = 0,
     limit: int = 100
-) -> list[Book] | None:
+) -> list[Book]:
     queryset = db.query(Book)
 
     if author_id is not None:
