@@ -3,8 +3,8 @@ from db.models import Author, Book
 import schemas
 
 
-def get_all_authors(db: Session) -> list[Author]:
-    return db.query(Author).all()
+def get_all_authors(db: Session, skip: int = 0, limit: int = 100) -> list[Author]:
+    return db.query(Author).offset(skip).limit(limit).all()
 
 
 def get_author(db: Session, author_id: int) -> Author | None:
@@ -30,14 +30,16 @@ def create_author(db: Session, author: schemas.AuthorCreate) -> Author:
 
 def get_book_list(
     db: Session,
-    author_id: int | None = None
+    author_id: int | None = None,
+    skip: int = 0,
+    limit: int = 100
 ) -> list[Book] | None:
     queryset = db.query(Book)
 
     if author_id is not None:
         queryset = queryset.filter(Book.author_id == author_id)
 
-    return queryset.all()
+    return queryset.offset(skip).limit(limit).all()
 
 
 def create_book(db: Session, book: schemas.BookCreate) -> Book:
